@@ -22,7 +22,7 @@ export async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
   const session = await auth()
 
   return (
@@ -38,5 +38,3 @@ export async function RootLayout({
     </html>
   )
 }
-
-export default RootLayout
