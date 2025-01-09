@@ -22,8 +22,7 @@ export async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // This is a placeholder. In a real app, you'd fetch the user data from your auth provider
-  const user = { name: 'John Doe', email: 'john@example.com' }
+  
   const session = await auth()
 
   return (
