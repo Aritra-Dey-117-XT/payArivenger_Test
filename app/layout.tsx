@@ -24,11 +24,12 @@ export async function RootLayout({
 }) {
 
   const session = await auth()
+  const user = session?.user as SessionUser
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar user={session?.user as SessionUser} />
+        <Navbar user={user} />
         {session && session?.user ? (
           <main>{children}</main>
         ) : (
