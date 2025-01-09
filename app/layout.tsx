@@ -3,6 +3,15 @@ import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import { auth } from '@/utils/auth'
 
+interface SessionUser {
+  name: string,
+  email: string,
+  image: string,
+  id: string
+}
+
+const session = await auth()
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -10,10 +19,13 @@ export const metadata = {
   description: 'An app with a beautiful navbar',
 }
 
-export async function RootLayout({children}) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
 
-  const session = await auth()
-  const user = session?.user
+  const user = session?.user as SessionUser
 
   return (
     <html lang="en">
