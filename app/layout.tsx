@@ -10,8 +10,6 @@ interface SessionUser {
   id: string
 }
 
-const session = await auth()
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -19,12 +17,13 @@ export const metadata = {
   description: 'An app with a beautiful navbar',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-
+  // Move the auth call inside the component
+  const session = await auth()
   const user = session?.user as SessionUser
 
   return (
