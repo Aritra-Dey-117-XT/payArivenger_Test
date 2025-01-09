@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({message: "SUCCESS!"}, {status: 200})
         
-    } catch (error: any) {
-        return NextResponse.json({error: "Couldn't place Order: " + error.message}, {status: 500})
+    } catch (error) {
+        return NextResponse.json({error: "Couldn't place Order: " + error}, {status: 500})
     }
 }

@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
             DB_orderId: newOrder._id
         }, {status: 200})
 
-    } catch (error: any) {
-        return NextResponse.json({error: "ERROR! Unable to Order: " + error.message}, {status: 500})
+    } catch (error) {
+        return NextResponse.json({error: "ERROR! Unable to Order: " + error}, {status: 500})
 
     }
 
