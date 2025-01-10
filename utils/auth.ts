@@ -57,22 +57,52 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //     return session
   //   }
   callbacks: {
-    async signIn({ user, account, profile }) {
-      console.log("SignIn Callback - User:", user);
-      console.log("SignIn Callback - Account:", account);
-      console.log("SignIn Callback - Profile:", profile);
-      return true; // or add conditional checks here
+    async signIn({ user, profile }) {
+      try {
+        console.log("Connecting to DB...");
+        await connectToDB();
+        console.log("Connected to DB");
+    
+        console.log("Checking if user already exists...");
+        const existingUser = await User.findOne({ email: user.email });
+    
+        if (!existingUser) {
+          console.log("Creating new user...");
+          await User.create({
+            id: profile?.sub,
+            name: user.name,
+            username: user?.email?.split("@")[0],
+            email: user.email,
+            password: null, // No password for OAuth users
+            imageURL: user.image,
+            provider: "google", // Optional: Track the provider
+          });
+          console.log("User created successfully.");
+        } else {
+          console.log("User already exists.");
+        }
+        return true;
+      } catch (error) {
+        console.error("Error during sign-in:", error);
+        return false;
+      }
     },
     async jwt({ token, account, profile }) {
-      console.log("JWT Callback - Token:", token);
-      console.log("JWT Callback - Account:", account);
+      if (account) {
+        token.id = profile?.sub; // Add user's unique ID
+        token.provider = account.provider; // Track the provider
+        token.accessToken = account.access_token; // Include OAuth access token
+      }
+      console.log("JWT Callback - Updated Token:", token);
       return token;
-    },
+    },    
     async session({ session, token }) {
-      console.log("Session Callback - Session:", session);
-      console.log("Session Callback - Token:", token);
+      session.user.id = token.id; // Add user ID to session
+      session.user.provider = token.provider; // Add provider info
+      session.accessToken = token.accessToken; // Include access token
+      console.log("Session Callback - Updated Session:", session);
       return session;
-    },
+    }    
   },
   
   // }
