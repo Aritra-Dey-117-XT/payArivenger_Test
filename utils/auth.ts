@@ -18,10 +18,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       try {
 
+        console.log("CONNNECTING TO DB")
         await connectToDB()
+        console.log("Connected to DB")
         const isAlreadyExists = await User.findOne({email: user.email}).lean()
+        console.log("CHECKING USER Exists")
 
         if(!isAlreadyExists) {
+          console.log("CReating user")
           await User.create({
               id: profile?.sub,
               name: user?.name,
