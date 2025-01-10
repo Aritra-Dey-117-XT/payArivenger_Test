@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, X } from 'lucide-react';
+import { useSession } from "next-auth/react";
 
 declare global {
   interface Window {
@@ -25,6 +26,7 @@ export default function Home() {
   const [amountError, setAmountError] = useState('');
   const [isProcessing, setProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: session } = useSession();
 
   const handlePayment = async () => {
     setProcessing(true);
@@ -126,6 +128,14 @@ export default function Home() {
     }
   };
 
+  if (!session) {
+    return (
+      <div className="w-full max-w-md mx-auto text-center">
+        <p className="text-lg font-semibold">Login First to Make a Payment</p>
+      </div>
+    );
+  }
+  
   return (
     <Card className="w-full max-w-md mx-auto">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />

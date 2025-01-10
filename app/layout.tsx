@@ -1,14 +1,15 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Navbar from '@/components/Navbar'
-import { auth } from '@/utils/auth'
+// import { auth } from '@/utils/auth'
+import NavWrapper from '@/components/NavWrapper'
+import { SessionProvider } from 'next-auth/react'
 
-interface SessionUser {
-  name: string,
-  email: string,
-  image: string,
-  id: string
-}
+// interface SessionUser {
+//   name: string,
+//   email: string,
+//   image: string,
+//   id: string
+// }
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,18 +24,16 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   // Move the auth call inside the component
-  const session = await auth()
-  const user = session?.user as SessionUser
+  // const session = await auth()
+  // const user = session?.user as SessionUser
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar user={user} />
-        {session && session?.user ? (
+        <NavWrapper />
+        <SessionProvider>
           <main>{children}</main>
-        ) : (
-          <main>Login First</main>
-        )}
+        </SessionProvider> 
       </body>
     </html>
   )
