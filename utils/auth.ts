@@ -96,13 +96,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log("JWT Callback - Updated Token:", token);
       return token;
     },    
-    async session({ session, token }) {
-      session.user.id = token.id; // Add user ID to session
-      session.user.provider = token.provider; // Add provider info
-      session.accessToken = token.accessToken; // Include access token
+    async session({ session, token }: { session: any; token: any }) {
+      // Typecast token to ensure it has the expected properties
+      const userToken = token as {
+        id?: string;
+        provider?: string;
+        accessToken?: string;
+      };
+    
+      // Add properties to the session object
+      session.user.id = userToken.id || ""; // Default to an empty string if undefined
+      session.user.provider = userToken.provider || ""; // Default to an empty string if undefined
+      session.accessToken = userToken.accessToken || ""; // Default to an empty string if undefined
+    
       console.log("Session Callback - Updated Session:", session);
       return session;
-    }    
+    }       
   },
   
   // }
