@@ -1,5 +1,7 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
+import { connectToDB } from "./db"
+import User from "@/models/User"
 
 interface SessionUser {
   user: {
@@ -13,20 +15,41 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     clientSecret: process.env.AUTH_GOOGLE_SECRET,
   })],
   callbacks: {
-    async signIn({ account, profile, user }) {
-      if (!profile) {
-        console.warn("Profile is undefined, rejecting sign-in.");
+    async signIn({ profile, user }) {
+      if (!profile && !user) {
+        console.warn("Profile or User is undefined, rejecting sign-in.");
         return false;
       }
     
-      const isEmailVerified = profile.email_verified;
+      const isEmailVerified = profile?.email_verified;
 
-      if (isEmailVerified) {
-        return true;
+      if (!isEmailVerified) {
+        console.warn("Sign-in rejected: Email not verified or invalid domain.");
+        return false;
       }
     
-      console.warn("Sign-in rejected: Email not verified or invalid domain.");
-      return false;
+      try {
+
+        await connectToDB();
+        const userExists = await User.findOne({ email: user?.email });
+    
+        if(userExists) {
+          return true
+        }
+
+        await User.create({
+          name: user?.name,
+          email: user?.email,
+          image: user?.image,
+        });
+    
+        return true;
+
+      } catch (error) {
+
+        console.error("Error during sign-in process:", error);
+        return false;
+      }
     },
     async jwt({ token, account, profile }) {
       if (account && profile) {
