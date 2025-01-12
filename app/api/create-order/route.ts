@@ -16,11 +16,15 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     const userId = session?.user?.id
     try {
+
+        await connectToDB()
+
         const rzpOrder = instance.orders.create({
             amount: Math.round(amount * 100),
             currency: "INR",
             receipt: `order_receipt_${Date.now()}_${Math.round(Math.random() * 1000)}`,
             notes: {
+                userId: userId!,
                 email: session?.user?.email!
             }
         });
@@ -42,7 +46,7 @@ export async function POST(request: NextRequest) {
             DB_orderId: newOrder._id
         }, {status: 200})
 
-    } catch(error) {
-        return NextResponse.json({error}, {status: 500})
+    } catch(error: any) {
+        return NextResponse.json({error: "Error Making Payment: " + error.message}, {status: 500})
     }
 }

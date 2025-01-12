@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, ChangeEvent, FormEvent, DragEvent } from 'react';
-import { useSession } from 'next-auth/react';
 import { X, Upload, Loader2 } from 'lucide-react';
 import axios from 'axios';
+import Script from 'next/script';
 
 declare global {
   interface Window {
@@ -17,7 +17,6 @@ const PaymentForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const { data: session } = useSession();
 
   const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -124,7 +123,7 @@ const PaymentForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <script src="https://checkout.razorpay.com/v1/checkout.js"></script> {/* SCRIPT FOR RAZORPAY CHECKOUT */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" /> {/* SCRIPT FOR RAZORPAY CHECKOUT */}
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold text-gray-900">Payment Details</h1>
