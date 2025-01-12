@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <div>
-      {session ? (
+      {/* {session ? (
         <div>
           <PaymentForm />
         </div>
@@ -15,7 +15,8 @@ export default async function Home() {
         <>
           <h1>Not signed in</h1>
         </>
-      )}
+      )} */}
+      <PaymentForm />
     </div>
   );
 }

@@ -24,13 +24,13 @@ export async function POST(request: NextRequest) {
             currency: "INR",
             receipt: `order_receipt_${Date.now()}_${Math.round(Math.random() * 1000)}`,
             notes: {
-                userId: userId!,
-                email: session?.user?.email!
+                userId: userId || 'Dummy User',
+                email: session?.user?.email || 'Dummy User'
             }
         });
 
         const newOrder = await Order.create({
-            email: session?.user?.email!,
+            email: session?.user?.email || 'Dummy User',
             amount: amount,
             currency: "INR",
             message,

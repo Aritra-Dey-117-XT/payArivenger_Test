@@ -104,7 +104,7 @@ const PaymentForm = () => {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: Math.round(Number(amount) * 100),
       currency: 'INR',
-      name: 'ARITRA DEY',
+      name: 'YOUR NAME',
       description: 'Test Transaction',
       order_id: order.orderId,
       prefill: {
