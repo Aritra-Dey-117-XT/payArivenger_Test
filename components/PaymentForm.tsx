@@ -108,9 +108,9 @@ const PaymentForm = () => {
       description: 'Test Transaction',
       order_id: order.orderId,
       prefill: {
-        name: 'ARITRA DEY',
-        email: 'aritradey2715@gmail.com',
-        contact: '8328728541'
+        name: 'Your Name',
+        email: 'your-email@domain.com',
+        contact: '9999999999'
       },
       theme: {
         color: '#F37254'
