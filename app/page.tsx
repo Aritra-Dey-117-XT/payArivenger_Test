@@ -1,4 +1,5 @@
 import { auth } from "@/utils/auth";
+import PaymentForm from './../components/PaymentForm';
 
 export default async function Home() {
 
@@ -7,10 +8,9 @@ export default async function Home() {
   return (
     <div>
       {session ? (
-        <>
-          <h1>User Information</h1>
-          <pre>{JSON.stringify(session, null, 2)}</pre>
-        </>
+        <div>
+          <PaymentForm />
+        </div>
       ) : (
         <>
           <h1>Not signed in</h1>
